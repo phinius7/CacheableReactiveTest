@@ -37,11 +37,25 @@ public class AppTest {
                 .withPrice(1.00)
                 .build());
 
+        Thread.sleep(4000);
+
+        System.out.println("==> Start Regular Insert 2 <==");
+        final Mono<Item> glass1 = itemService.save(Item.Builder.anItem()
+                .withName("glass")
+                .withPrice(1.00)
+                .build());
+
         final String id = glass.block().getId();
+
+        final String id1 = glass1.block().getId();
 
         System.out.println("==> First get <==");
         final Mono<Item> mono = itemService.getItem(id);
         final Item item = mono.block();
+        System.out.println("==> Done <==");
+
+        System.out.println("==> First get 2 <==");
+        itemService.getItem(id1).block();
         System.out.println("==> Done <==");
 
         Assertions.assertNotNull(item);
@@ -53,14 +67,24 @@ public class AppTest {
         final Item itemCached = monoCached.block();
         System.out.println("==> Done <==");
 
+        Thread.sleep(4000);
+
+        System.out.println("==> Second get 2 <==");
+        itemService.getItem(id1).block();
+        System.out.println("==> Done <==");
+
         Assertions.assertNotNull(itemCached);
         Assertions.assertEquals(itemCached.getName(), "glass");
         Assertions.assertEquals(itemCached.getPrice(), 1.00);
 
-        Thread.sleep(8000);
+        Thread.sleep(4000);
 
         System.out.println("==> Third get <==");
         itemService.getItem(id).block();
+        System.out.println("==> Done <==");
+
+        System.out.println("==> Third get 2 <==");
+        itemService.getItem(id1).block();
         System.out.println("==> Done <==");
 
         System.out.println("==> Finish task <==");

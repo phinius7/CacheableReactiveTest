@@ -15,7 +15,7 @@ public class ItemService {
         this.repository = repository;
     }
 
-    @Cacheable("items")
+    @Cacheable(value = "items", key = "#id.hashCode()")
     public Mono<Item> getItem(final String id) {
         return repository.findById(id);
     }
